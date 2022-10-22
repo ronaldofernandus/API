@@ -1,76 +1,44 @@
-const { user } = require("../models");
+const { User, Post } = require("../models");
 const { decryptPass } = require("../helpers/bcrypt");
-const { tokenGenerator, tokenVerifier } = require("../helpers/jsonwebtoken");
+const { tokenGenerator } = require("../helpers/jsonwebtoken");
 
 class UserController {
-  static async getinfoUserbyId(req, res) {
+  static async register(req, res) {
     try {
-      const id = Number(req.userData.id);
-
-      let users = [await user.findByPk(id)];
-      res.status(200).json(users);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+      const { username, email, password } = req.body;
+      const createdUser = await User.create({
+        username,
+        email,
+        password,
+      });
+      res.status(200).json(createdUser);
+    } catch (error) {
+      console.log(error);
+      // res.status(500).json({ message: error.message });
     }
   }
+
   static async login(req, res) {
+    const { name, email, password } = req.body;
+
     try {
-      const { user_email, user_password } = req.body;
-      let emailFound = await user.findOne({
-        where: { user_email },
+      const emailFound = await User.findOne({
+        where: { email },
       });
 
       if (emailFound) {
-        if (decryptPass(user_password, emailFound.user_password)) {
-          let access_token = tokenGenerator(emailFound);
-          let verToken = tokenVerifier(access_token);
-          res.status(201).json({ access_token });
-          console.log(verToken);
+        if (decryptPass(password, emailFound.password)) {
+          let token = tokenGenerator(emailFound);
+          // let verifyToken = tokenVerifier(token);
+          res.status(200).json({ token });
         } else {
-          res.status(403).json({
-            message: `Invalid Password`,
-          });
+          res.status(403).json({ message: `invalid password!` });
         }
       } else {
-        res.status(404).json({
-          message: `404: Not Found!`,
-        });
+        res.status(404).json({ message: `user not found!` });
       }
-    } catch (err) {
-      res.status(404).json({
-        message: err.message,
-      });
-    }
-  }
-  static async register(req, res) {
-    try {
-      const user_avatar = req.file.filename;
-      const {
-        user_name,
-        user_email,
-        user_password,
-
-        user_birthdate,
-        user_gender,
-
-        user_type,
-      } = req.body;
-
-      let result = await user.create({
-        user_name,
-        user_email,
-        user_password,
-        user_birthdate,
-        user_gender,
-        user_avatar,
-        user_type,
-      });
-      res.status(200).json(result);
-    } catch (err) {
-      console.log(err);
-      // res.status(404).json({
-      //   message: `Register has Failed!`,
-      // });
+    } catch (error) {
+      res.status(500).json({ error: error });
     }
   }
 }
