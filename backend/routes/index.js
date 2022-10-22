@@ -7,7 +7,8 @@ route.get("/", (req, res) => {
 });
 
 const UserRoutes = require("./user");
+const ListRoutes = require("./list");
 
 route.use("/user", UserRoutes);
-
+route.use("/checklist", ListRoutes);
 module.exports = route;
