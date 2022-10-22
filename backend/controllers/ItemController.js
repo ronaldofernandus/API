@@ -3,13 +3,12 @@ const { Checklist, User, ChecklistItem } = require("../models");
 class ItemController {
   static async getAllItem(req, res) {
     try {
-      const CheckListId = +req.params.id;
+      const ChecklistId = +req.params.ChecklistId;
 
-      const ChecklistItem = await ChecklistItem.findOne({
-        include: [User],
-        where: { CheckListId },
+      const CheckItem = await ChecklistItem.findAll({
+        included: [Checklist],
       });
-      res.status(200).json(ChecklistItem);
+      res.status(200).json(CheckItem);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -18,22 +17,15 @@ class ItemController {
   static async createItem(req, res) {
     try {
       const { itemName } = req.body;
-      const checklistId = +req.params.checklistId;
-      console.log(checklistId);
+      const ChecklistId = +req.params.ChecklistId;
+      console.log(ChecklistId);
 
       const UserId = +req.userData.id;
       console.log(UserId);
 
-      // let CheckListUpdate = await Checklist.update({
-      //   where: {
-      //     checklistId: checklistId,
-      //   },
-      // });
-      //   console.log(GetChecklistId);
-      //   console.log(id);
       const createdItem = await ChecklistItem.create({
         itemName,
-        // checklistId,
+        ChecklistId,
         UserId,
       });
       res.status(200).json(createdItem);
