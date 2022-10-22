@@ -5,8 +5,9 @@ class ItemController {
     try {
       const ChecklistId = +req.params.ChecklistId;
 
-      const CheckItem = await ChecklistItem.findAll({
+      const CheckItem = await ChecklistItem.findOne({
         included: [Checklist],
+        where: { ChecklistId },
       });
       res.status(200).json(CheckItem);
     } catch (error) {
