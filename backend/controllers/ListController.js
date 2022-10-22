@@ -3,11 +3,11 @@ const { Checklist, User } = require("../models");
 class ListController {
   static async getAllList(req, res) {
     try {
-      const users = await Checklist.findAll({
+      const List = await Checklist.findAll({
         order: [["updatedAt", "desc"]],
         include: [User],
       });
-      res.status(200).json(users);
+      res.status(200).json(List);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
