@@ -35,21 +35,32 @@ class ItemController {
     }
   }
 
-  //   static async deleteList(req, res) {
-  //     try {
-  //       const id = +req.params.id;
+  static async deleteItem(req, res) {
+    try {
+      const ChecklistItemId = +req.params.ChecklistItemId;
+      const ChecklistId = +req.params.ChecklistId;
+      console.log(ChecklistId);
 
-  //       const deletedList = await Post.destroy({
-  //         where: { id },
-  //       });
+      const UserId = +req.userData.id;
+      console.log(UserId);
 
-  //       deletedList === 1
-  //         ? res.status(200).json({ message: `List has been deleted` })
-  //         : res.status(404).json({ message: `id is not found` });
-  //     } catch (error) {
-  //       res.status(500).json({ message: error.message });
-  //     }
-  //   }
+      const deletedChecklist = await Checklist.destroy({
+        where: {
+          ChecklistId,
+        },
+      });
+
+      const deletedItem = await ChecklistItem.destroy({
+        where: { ChecklistItemId },
+      });
+
+      deletedItem === 1
+        ? res.status(200).json({ message: `Item has been deleted` })
+        : res.status(404).json({ message: `id is not found` });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 module.exports = ItemController;
