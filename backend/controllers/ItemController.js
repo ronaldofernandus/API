@@ -18,7 +18,7 @@ class ItemController {
   static async createItem(req, res) {
     try {
       const { itemName } = req.body;
-      const checklistId = +req.params.id;
+      const checklistId = +req.params.checklistId;
       console.log(checklistId);
 
       const UserId = +req.userData.id;
@@ -29,7 +29,8 @@ class ItemController {
           checklistId: checklistId,
         },
       });
-      console.log(id);
+      //   console.log(GetChecklistId);
+      //   console.log(id);
       const createdItem = await ChecklistItem.create({
         itemName,
         GetChecklistId,

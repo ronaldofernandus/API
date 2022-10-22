@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   ChecklistItem.init(
     {
       itemName: DataTypes.STRING,
+      ChecklistId: DataTypes.INTEGER,
       UserId: DataTypes.INTEGER,
     },
     {
