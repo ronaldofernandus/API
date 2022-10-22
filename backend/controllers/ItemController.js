@@ -33,7 +33,7 @@ class ItemController {
       //   console.log(id);
       const createdItem = await ChecklistItem.create({
         itemName,
-        checklistId,
+        // checklistId,
         UserId,
       });
       res.status(200).json(createdItem);
