@@ -24,16 +24,16 @@ class ItemController {
       const UserId = +req.userData.id;
       console.log(UserId);
 
-      let GetChecklistId = await Checklist.findOne({
-        where: {
-          checklistId: checklistId,
-        },
-      });
+      // let CheckListUpdate = await Checklist.update({
+      //   where: {
+      //     checklistId: checklistId,
+      //   },
+      // });
       //   console.log(GetChecklistId);
       //   console.log(id);
       const createdItem = await ChecklistItem.create({
         itemName,
-        GetChecklistId,
+        checklistId,
         UserId,
       });
       res.status(200).json(createdItem);
